@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Self Plagiarism Checker</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    
+     <header class="site-header">
+        <div class="logo">
+            FINALSCANPRO
+        </div>
+
+        <nav class="main-nav">
+            <a href="#">Home</a>
+            <a href="#">Video Demo</a>
+            <a href="#">Free Tools</a>
+            <a href="#">Learn</a>
+            <a href="#">Company</a>
+        </nav>
+
+   </header>
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <span class="hero-badge">
+                Originality Tools
+            </span>
+
+            <h1>
+                Free Self Plagiarism Checker
+            </h1>
+
+            <p class="hero-description">
+                Upload your main document and reference sources to identify
+                overlapping content and maintain originality across your work.
+            </p>
+
+            <div class="tool-links">
+                <a href="#">Grammar Checker</a>
+                <a href="#">AI Detector</a>
+                <a href="#">Paraphraser</a>
+                <a href="#">Humanizer</a>
+                <a href="#">Reword</a>
+                <a href="#">Proofreader</a>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="checker-layout">
+
+	<div class="row-layout">
+		
+
+    		<section class="card step-card">
+		<!-- STEP 1 -->
+
+			<div class="step-header">
+                    		<span class="step-number">1</span>
+                    		<div><h2>Upload Documents</h2>
+                    		<p>Choose your main document and reference documents.</p>
+                    		</div>
+                	</div>
+
+                	<div class="upload-grid">
+
+                    		<!-- MAIN DOCUMENT -->
+                    		<div class="upload-card">
+					<h3>Main Document</h3>
+                        		<div class="upload-zone" id="mainUploadZone">
+                        			<div class="upload-icon"> ☁ </div>
+                        			<p class="upload-title"> Drag & Drop Your File Here</p>
+						<p class="upload-subtitle"> or click to browse files</p>
+						
+						<button type="button" id="mainFileButton">Choose File</button>
+						
+						<input type="file" id="mainFileInput" accept=".pdf,.doc,.docx,.txt" class = "hidden-input">
+						<small> Supported: PDF, DOCX, TXT </small>
+                        		</div>
+					<div id="mainFileList" class="file-list"></div>
+                    		</div>
+				
+                    		<!-- REFERENCE DOCUMENTS -->
+                    		<div class="upload-card">
+				<h3>Reference Documents</h3>
+                        	<div class="upload-zone" id="referenceUploadZone">
+                            		<div class="upload-icon"> ☁ </div>
+                            		<p class="upload-title"> Upload Reference Sources </p>
+                            		<p class="upload-subtitle"> Up to 5 documents </p>
+					<button type="button" id="referenceFileButton">Choose Files</button>
+					<input type="file" id="referenceFileInput" accept=".pdf,.doc,.docx,.txt" multiple class="hidden-input">
+					<small> Supported: PDF, DOCX, TXT </small>
+                        	</div>
+				<div id="referenceFileList" class="file-list"></div>
+				<p class="reference-limit"> Please upload a maximum of 5 reference documents</p>
+                   
+			</div>
+               			
+    		</section>
+
+    		<aside class="sidebar-card">
+
+				<h3>How It Works</h3>
+
+    				<div class="how-item">
+        				<div class="check-icon">✓</div>
+        				<div><h4>Upload your main document</h4>
+            				<p>This is the document you want to check.</p>
+        				</div>
+    				</div>
+
+    				<div class="how-item">
+        				<div class="check-icon">✓</div>
+        				<div><h4>Add reference documents</h4>
+            					<p>Upload your previous work or other sources to compare against.</p>
+        				</div>
+    				</div>
+
+    				<div class="how-item">
+        				<div class="check-icon">✓</div>
+        				<div><h4>Run the check</h4>
+            					<p>Our AI will scan for similarities within your documents.</p>
+        				</div>
+    				</div>
+
+    				<div class="how-item">
+        				<div class="check-icon">✓</div>
+        				<div><h4>Review results</h4>
+            					<p>View matches, similarity percentage, and detailed report.</p>
+        				</div>
+    				</div>
+
+    
+        	
+		</aside>
+	</div>				<!-- End of 1st Row -->
+
+	<div class="row-layout">	<!-- 2nd Row -->
+
+            	<section class="card step-card">
+		<!-- STEP 2 -->
+
+                	<div class="step-header">
+                    		<span class="step-number">2</span>
+                    		<div>
+                        	<h2>Settings</h2>
+                        	<p>Adjust comparison settings.</p>
+                    		</div>
+                	</div>
+
+                	<div class="settings-layout">
+
+                    		<div class="sensitivity-section">
+                        	<h3>Comparison Sensitivity</h3>
+					<div class="sensitivity-options">
+					<label>
+                            			<input type="radio" name="sensitivity">
+                            			Low
+                        		</label>
+                        		<label>
+                            			<input type="radio" name="sensitivity" checked>
+                            			Medium (Recommended)
+                        		</label>
+                        		<label>
+                            			<input type="radio" name="sensitivity">
+                            			High
+                        		</label>
+					</div>
+				</div>
+
+                    	<div class="toggle-section">
+	                        <div>
+                            	<h3>Exclude Quotes & Bibliography</h3>
+                            	<p>Ignore quoted content during comparison.</p>
+                        	</div>
+
+                        	<label class="switch">
+                            	<input type="checkbox" checked>
+                            	<span class="slider"></span>
+                        	</label>
+				</div>
+
+                	</div>
+		</section>
+
+    		<aside class="sidebar-card safe-card">
+			
+			<div class = "safe-box">
+			<div class="safe-icon">🛡️</div>
+				<div class="safe-content">
+				<h3>Your Data is Safe</h3>
+				<p>All files are encrypted and automatically deleted after 24 hours. We do not store or share your documents.</p>
+				</div>
+
+			</div>
+        		
+        	
+		</aside>
+
+	</div>
+
+	<div class="row-layout">
+            	<section class="card step-card">
+                <div class="step-header">
+                    <span class="step-number">3</span>
+                    <div><h2>Start Check</h2>
+                    <p>Run a self-plagiarism scan.</p>
+                    </div>
+                </div>
+		<button id="scanButton" class="scan-button" disabled>Check for Self Plagiarism</button>
+                </section>
+
+    		<aside class="sidebar-card">
+			<div class="tips-header">
+        		<div class="tips-icon">💡</div>
+        		
+			<div><h3>Tips for Best Results</h3>
+			<br>
+    			
+
+    			<ul class="tips-list">
+        			<li>Upload all versions of your work</li>
+        			<li>Include drafts and previous submissions</li>
+        			<li>Use PDF or DOCX for best accuracy</li>
+        			<li>Exclude commonly used references</li>
+    			</ul>
+			</div>
+			
+		</aside>
+
+	</div>
+
+<div class="row-layout"> <!-- Results - hidden row>
+
+	<!-- ========================================= -->
+	<!-- Scan Results -->
+	<!-- ========================================= -->
+
+	<section id="resultsSection" class="results-section hidden">
+
+    	<div class="report-header">
+
+    	<h2>Scan Results</h2>
+
+    	<p>FINALSCANPRO Self-Plagiarism Analysis Report</p>
+
+	</div>
+
+    	<div class="summary-card">
+
+    		<h2>Executive Summary</h2>
+
+    		<div id="matchCount"></div>
+
+	</div>
+
+    	<!-- NEW -->
+	
+	<div class="comparison-card">
+
+		<h2 class="table-title">Comparison Snapshot</h2>
+
+		 <div class="table-wrapper">
+		
+    			<div id="summaryTable"></div>
+		</div>
+	
+	</div>
+
+    	<div class="comparison-card"><h2 class="table-title"> ▼ Matching Sentences from Reference Documents: ▼ </h2></div>
+
+    	<div id="resultsList"></div>
+
+</section>
+
+	</div>
+</main>
+
+
+<script src="libraries/pdf.min.js"></script>
+
+<script src="libraries/pdf.worker.min.js"></script>
+
+<script src="libraries/mammoth.browser.min.js"></script>
+
+<script src="js/documentReader.js"></script>
+
+<script src="js/textProcessor.js"></script>
+
+<script src="js/documentAnalyzer.js"></script>
+
+<script src="js/stopWords.js"></script>
+
+<script src="js/stemmer.js"></script>
+
+<script src="js/comparisonEngine.js"></script>
+
+<script src="js/statistics.js"></script>
+
+<script src="js/resultsRenderer.js"></script>
+
+<script src="js/upload.js"></script>
+
+<script src="js/scanController.js"></script>
+
+</body>
+</html>
