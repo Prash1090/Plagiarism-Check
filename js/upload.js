@@ -4,11 +4,9 @@
 // Handles file uploads and drag & drop
 // =====================================================
 
-
 // =====================================================
 // Global Variables
 // =====================================================
-
 
 let mainDocument = null;
 
@@ -18,80 +16,60 @@ let referenceDocuments = [];
 // DOM Elements
 // =====================================================
 
-const mainInput =
-    document.getElementById("mainFileInput");
+const mainInput = document.getElementById("mainFileInput");
 
-const referenceInput =
-    document.getElementById("referenceFileInput");
+const referenceInput = document.getElementById("referenceFileInput");
 
-const mainButton =
-    document.getElementById("mainFileButton");
+const mainButton = document.getElementById("mainFileButton");
 
-const referenceButton =
-    document.getElementById("referenceFileButton");
+const referenceButton = document.getElementById("referenceFileButton");
 
-const mainList =
-    document.getElementById("mainFileList");
+const mainList = document.getElementById("mainFileList");
 
-const referenceList =
-    document.getElementById("referenceFileList");
+const referenceList = document.getElementById("referenceFileList");
 
-const scanButton =
-    document.getElementById("scanButton");
+const scanButton = document.getElementById("scanButton");
 
-const mainUploadZone =
-    document.getElementById("mainUploadZone");
+const mainUploadZone = document.getElementById("mainUploadZone");
 
-const referenceUploadZone =
-    document.getElementById("referenceUploadZone");
+const referenceUploadZone = document.getElementById("referenceUploadZone");
+
+const spinner = document.getElementById("spinner");
 
 const allowedExtensions = ["pdf", "doc", "docx", "txt"];
-
 
 // =====================================================
 // Validation
 // =====================================================
 
 function isValidFile(file) {
+  const extension = file.name.split(".").pop().toLowerCase();
 
-    const extension = file.name.split(".").pop().toLowerCase();
-
-    return allowedExtensions.includes(extension);
-
+  return allowedExtensions.includes(extension);
 }
-
 
 // =====================================================
 // Open File Dialog Events
 // =====================================================
 
 mainButton.addEventListener("click", (event) => {
+  event.stopPropagation();
 
-    event.stopPropagation();
-
-    mainInput.click();
-
+  mainInput.click();
 });
 
 referenceButton.addEventListener("click", (event) => {
+  event.stopPropagation();
 
-    event.stopPropagation();
-
-    referenceInput.click();
-
+  referenceInput.click();
 });
 
-
 mainUploadZone.addEventListener("click", () => {
-
-    mainInput.click();
-
+  mainInput.click();
 });
 
 referenceUploadZone.addEventListener("click", () => {
-
-    referenceInput.click();
-
+  referenceInput.click();
 });
 
 // =====================================================
@@ -99,232 +77,202 @@ referenceUploadZone.addEventListener("click", () => {
 // =====================================================
 
 function displayMainFile() {
+  mainList.innerHTML = "";
 
-    mainList.innerHTML = "";
+  if (mainDocument == null) {
+    return;
+  }
 
+  const div = document.createElement("div");
+
+  div.className = "file-item";
+
+  div.innerHTML = `
+	<span>${mainDocument.name}</span>
+        <span class="file-remove">✕</span>
+    `;
+
+  div.querySelector(".file-remove").onclick = () => {
+    mainDocument = null;
+
+    mainInput.value = "";
+
+    displayMainFile();
+
+    resetPages();
+    //alert("i am here");
+    updateScanButton();
+  };
+
+  mainList.appendChild(div);
+}
+
+function displayReferenceFiles() {
+  referenceList.innerHTML = "";
+
+  referenceDocuments.forEach((file, index) => {
     const div = document.createElement("div");
 
     div.className = "file-item";
 
     div.innerHTML = `
-	<span>${mainDocument.name}</span>
-        <span class="file-remove">✕</span>
-    `;
-
-    div.querySelector(".file-remove")
-        .onclick = () => {
-
-            mainDocument = null;
-
-            mainInput.value = "";
-
-            displayMainFile();
-
-            updateScanButton();
-
-        };
-
-    mainList.appendChild(div);
-
-}
-
-
-function displayReferenceFiles() {
-
-    referenceList.innerHTML = "";
-
-    referenceDocuments.forEach((file,index)=>{
-
-        const div = document.createElement("div");
-
-        div.className = "file-item";
-
-        div.innerHTML = `
             <span>${file.name}</span>
             <span class="file-remove">✕</span>
         `;
 
-        div.querySelector(".file-remove")
-            .onclick = ()=>{
+    div.querySelector(".file-remove").onclick = () => {
+      referenceDocuments.splice(index, 1);
 
-                referenceDocuments.splice(index,1);
+      displayReferenceFiles();
 
-                displayReferenceFiles();
+      updateScanButton();
+    };
 
-                updateScanButton();
-
-            };
-
-        referenceList.appendChild(div);
-
-    });
-
+    referenceList.appendChild(div);
+  });
 }
 
-
 function showInvalidFileMessage(fileName) {
-
-    alert(
-        `"${fileName}" is not a supported file type.\n\n` +
-        "Please upload only PDF, DOC, DOCX or TXT files."
-    );
-
+  alert(
+    `"${fileName}" is not a supported file type.\n\n` +
+      "Please upload only PDF, DOC, DOCX or TXT files.",
+  );
 }
 // =====================================================
 // Scan Button
 // =====================================================
 
 function updateScanButton() {
+  console.log("Scan function Triggered");
 
-	console.log("Scan function Triggered")
+  console.log("updateScanButton() called");
 
-    	console.log("updateScanButton() called");
+  console.log("mainDocument =", mainDocument);
 
-    	console.log("mainDocument =", mainDocument);
+  console.log("referenceDocuments =", referenceDocuments);
 
-    	console.log("referenceDocuments =", referenceDocuments);
-	
+  const ready = mainDocument !== null && referenceDocuments.length > 0;
 
-    const ready = mainDocument !== null && referenceDocuments.length > 0;
+  console.log("ready =", ready);
 
-	console.log("ready =", ready);
+  scanButton.disabled = !ready;
 
-    scanButton.disabled = !ready;
-
-    scanButton.classList.toggle("enabled",ready);
-
+  scanButton.classList.toggle("enabled", ready);
 }
 
-
-
 function addReferenceFile(file) {
+  if (!isValidFile(file)) {
+    showInvalidFileMessage(file.name);
+    return;
+  }
 
-    if (!isValidFile(file)) {
+  if (referenceDocuments.length >= 5) return;
 
-        showInvalidFileMessage(file.name);
-        return;
-
-    }
-
-    if (referenceDocuments.length >= 5)
-        return;
-
-    referenceDocuments.push(file);
-
+  referenceDocuments.push(file);
 }
 
 //=====================================================
 //Drag & Drop
 //=====================================================
 
-
 //=====================================================1
 
 mainInput.addEventListener("change", async () => {
+  if (mainInput.files.length === 0) return;
 
-    if (mainInput.files.length === 0)
-        return;
+  const file = mainInput.files[0];
 
-    const file = mainInput.files[0];
+  if (!isValidFile(file)) {
+    showInvalidFileMessage(file.name);
 
-    if (!isValidFile(file)) {
+    mainInput.value = "";
 
-        showInvalidFileMessage(file.name);
+    return;
+  }
 
-        mainInput.value = "";
+  mainDocument = file;
 
-        return;
+  spinner.style.display = "inline-block";
+  const text = await readDocument(file);
+  spinner.style.display = "none";
+  //console.log(text);
 
-    }
+  displayMainFile();
 
-mainDocument = file;
+  updateViewer();
 
-const text = await readDocument(file);
-
-//console.log(text);
-
-displayMainFile();
-
-updateScanButton();
-
+  //console.log();
+  updateScanButton();
 });
+
+//New code for  updating the viewer
+async function updateViewer() {
+  const mainAnalysis = await analyzeDocument(mainDocument);
+  update_reader(mainAnalysis.text);
+}
 
 //=====================================================2
 
-
 referenceInput.addEventListener("change", () => {
+  const newFiles = [...referenceInput.files];
 
-	const newFiles = [...referenceInput.files];
+  newFiles.forEach(addReferenceFile);
 
-	newFiles.forEach(addReferenceFile);
+  displayReferenceFiles();
 
-	displayReferenceFiles();
+  updateScanButton();
 
-	updateScanButton();
-
-referenceInput.value = "";
-	
+  referenceInput.value = "";
 });
 
 //=====================================================3
 
-
 mainUploadZone.addEventListener("dragover", (event) => {
+  event.preventDefault();
 
-    event.preventDefault();
-
-    mainUploadZone.classList.add("drag-over");
-
+  mainUploadZone.classList.add("drag-over");
 });
-
 
 //=====================================================4
 
 mainUploadZone.addEventListener("dragleave", () => {
-
-    mainUploadZone.classList.remove("drag-over");
-
+  mainUploadZone.classList.remove("drag-over");
 });
 
 //=====================================================5
 
 mainUploadZone.addEventListener("drop", async (event) => {
+  event.preventDefault();
 
-    event.preventDefault();
+  mainUploadZone.classList.remove("drag-over");
 
-    mainUploadZone.classList.remove("drag-over");
+  if (event.dataTransfer.files.length === 0) return;
 
-    if (event.dataTransfer.files.length === 0)
-        return;
+  const file = event.dataTransfer.files[0];
 
-    const file = event.dataTransfer.files[0];
+  if (!isValidFile(file)) {
+    showInvalidFileMessage(file.name);
 
-    if (!isValidFile(file)) {
+    mainInput.value = "";
 
-        showInvalidFileMessage(file.name);
+    return;
+  }
 
-        mainInput.value = "";
+  mainDocument = file;
 
-        return;
+  const document = await analyzeDocument(file);
 
-    }
+  //console.log(document);
 
-    mainDocument = file;
+  console.log(document.fileName);
 
-	const document = await analyzeDocument(file);
+  console.log(document.wordCount);
 
-	//console.log(document);
-	
-	console.log(document.fileName);
+  console.log(document.paragraphs);
 
-	console.log(document.wordCount);
+  console.log(document.filesize);
 
-	console.log(document.paragraphs);
-
-	console.log(document.filesize)
-
-	
-	/*const text = await readDocument(file);
+  /*const text = await readDocument(file);
 
 	const cleaned = cleanText(text);
 
@@ -338,49 +286,40 @@ mainUploadZone.addEventListener("drop", async (event) => {
 
 	console.log(splitIntoSentences(cleaned));*/
 
-    displayMainFile();
+  displayMainFile();
 
-    updateScanButton();
-
+  updateScanButton();
 });
 
 //=====================================================6
 
 referenceUploadZone.addEventListener("dragover", (event) => {
+  event.preventDefault();
 
-    event.preventDefault();
-
-    referenceUploadZone.classList.add("drag-over");
-
+  referenceUploadZone.classList.add("drag-over");
 });
 
 //=====================================================7
 
 referenceUploadZone.addEventListener("dragleave", () => {
-
-    referenceUploadZone.classList.remove("drag-over");
-
+  referenceUploadZone.classList.remove("drag-over");
 });
-
 
 //=====================================================8
 referenceUploadZone.addEventListener("drop", (event) => {
+  event.preventDefault();
 
-    event.preventDefault();
+  referenceUploadZone.classList.remove("drag-over");
 
-    referenceUploadZone.classList.remove("drag-over");
+  if (event.dataTransfer.files.length === 0) return;
 
-    if (event.dataTransfer.files.length === 0)
-        return;
+  const droppedFiles = [...event.dataTransfer.files];
 
-    const droppedFiles = [...event.dataTransfer.files];
+  droppedFiles.forEach(addReferenceFile);
 
-	droppedFiles.forEach(addReferenceFile);
+  displayReferenceFiles();
 
-	displayReferenceFiles();
-
-	updateScanButton();
-
+  updateScanButton();
 });
 
 //=====================================================

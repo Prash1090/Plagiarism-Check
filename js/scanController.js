@@ -4,125 +4,184 @@
 // Controls the scanning workflow
 // =====================================================
 
-
 // =====================================================
 // Scan Button
 // =====================================================
 
-scanButton.addEventListener("click", startScan);
+//scanButton.addEventListener("click", startScan);
 
+scanButton.addEventListener("click", processPages);
 
 // =====================================================
 // Start Scan
 // =====================================================
 
 async function startScan() {
+  // Ensure required files exist
 
-    // Ensure required files exist
+  if (!mainDocument) {
+    alert("Please upload a main document.");
 
-    if (!mainDocument) {
+    return;
+  }
 
-        alert("Please upload a main document.");
+  if (referenceDocuments.length === 0) {
+    alert("Please upload at least one reference document.");
 
-        return;
+    return;
+  }
 
-    }
+  console.clear();
 
-    if (referenceDocuments.length === 0) {
+  console.log("=================================");
+  console.log("FINALSCANPRO");
+  console.log("Starting Scan...");
+  console.log("=================================");
 
-        alert("Please upload at least one reference document.");
+  // ---------------------------------------------
+  // Analyse Main Document
+  // ---------------------------------------------
 
-        return;
+  console.log("Reading Main Document...");
 
-    }
+  const mainAnalysis = await analyzeDocument(mainDocument);
 
-    console.clear();
+  console.log(mainAnalysis);
 
-    console.log("=================================");
-    console.log("FINALSCANPRO");
-    console.log("Starting Scan...");
-    console.log("=================================");
+  // ---------------------------------------------
+  // Analyse Reference Documents
+  // ---------------------------------------------
 
+  console.log("Reading Reference Documents...");
 
-    // ---------------------------------------------
-    // Analyse Main Document
-    // ---------------------------------------------
+  const referenceAnalyses = [];
 
-    console.log("Reading Main Document...");
+  for (const file of referenceDocuments) {
+    const analysis = await analyzeDocument(file);
 
-    const mainAnalysis =
-        await analyzeDocument(mainDocument);
+    referenceAnalyses.push(analysis);
+  }
 
-    console.log(mainAnalysis);
+  console.log(referenceAnalyses);
 
+  // ---------------------------------------------
+  // Compare Documents
+  // ---------------------------------------------
 
-    // ---------------------------------------------
-    // Analyse Reference Documents
-    // ---------------------------------------------
+  console.log("Comparing Documents...");
 
-    console.log("Reading Reference Documents...");
+  const matches = compareDocuments(mainAnalysis, referenceAnalyses);
+  console.table(matches);
 
-    const referenceAnalyses = [];
+  const statistics = calculateStatistics(matches);
 
-    for (const file of referenceDocuments) {
+  console.log("This is where the final table shows up");
 
-        const analysis =
-            await analyzeDocument(file);
+  console.table(matches);
+  renderResults(matches, statistics);
 
-        referenceAnalyses.push(analysis);
+  // ---------------------------------------------
+  // Summary
+  // ---------------------------------------------
 
-    }
+  console.log("=================================");
 
-    console.log(referenceAnalyses);
+  console.log("Scan Complete");
 
+  console.log("Main Document:", mainAnalysis.fileName);
 
-    // ---------------------------------------------
-    // Compare Documents
-    // ---------------------------------------------
+  console.log("Reference Documents:", referenceAnalyses.length);
 
-    console.log("Comparing Documents...");
+  console.log("Matches Found:", matches.length);
 
-    const matches =
-        compareDocuments(
-            mainAnalysis,
-            referenceAnalyses
-        );
-     console.table(matches)
+  console.log("=================================");
+}
 
-	const statistics = 
-    calculateStatistics(matches);
+async function startScanAsync() {
+  // Ensure required files exist
 
-console.log("This is where the final table shows up")
+  if (!mainDocument) {
+    alert("Please upload a main document.");
 
-    console.table(matches);
-	renderResults(matches, statistics);
+    return;
+  }
 
-	
+  if (referenceDocuments.length === 0) {
+    alert("Please upload at least one reference document.");
 
+    return;
+  }
 
-    // ---------------------------------------------
-    // Summary
-    // ---------------------------------------------
+  console.clear();
 
-    console.log("=================================");
+  console.log("=================================");
+  console.log("FINALSCANPRO");
+  console.log("Starting Scan...");
+  console.log("=================================");
 
-    console.log("Scan Complete");
+  // ---------------------------------------------
+  // Analyse Main Document
+  // ---------------------------------------------
 
-    console.log(
-        "Main Document:",
-        mainAnalysis.fileName
-    );
+  console.log("Reading Main Document...");
 
-    console.log(
-        "Reference Documents:",
-        referenceAnalyses.length
-    );
+  const mainAnalysis = await analyzeDocument(mainDocument);
 
-    console.log(
-        "Matches Found:",
-        matches.length
-    );
+  viewer.textContent = mainAnalysis.text;
 
-    console.log("=================================");
+  console.log(mainAnalysis);
 
+  // ---------------------------------------------
+  // Analyse Reference Documents
+  // ---------------------------------------------
+
+  console.log("Reading Reference Documents...");
+
+  const referenceAnalyses = [];
+
+  for (const file of referenceDocuments) {
+    const analysis = await analyzeDocument(file);
+
+    referenceAnalyses.push(analysis);
+  }
+
+  console.log(referenceAnalyses);
+
+  // ---------------------------------------------
+  // Compare Documents
+  // ---------------------------------------------
+
+  console.log("Comparing Documents...");
+
+  const matches = await compareDocumentsAsync(mainAnalysis, referenceAnalyses);
+  console.table(matches);
+
+  const statistics = calculateStatistics(matches);
+
+  console.log("This is where the final table shows up");
+
+  console.table(matches);
+  //renderResults(matches, statistics);
+
+  // ---------------------------------------------
+  // Summary
+  // ---------------------------------------------
+
+  console.log("=================================");
+
+  console.log("Scan Complete");
+
+  console.log("Main Document:", mainAnalysis.fileName);
+
+  console.log("Reference Documents:", referenceAnalyses.length);
+
+  console.log("Matches Found:", matches.length);
+
+  console.log("=================================");
+
+  return {
+    mainAnalysis,
+    matches,
+    statistics,
+  };
 }

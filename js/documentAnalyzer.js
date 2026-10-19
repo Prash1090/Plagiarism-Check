@@ -4,57 +4,47 @@
 // Creates document analysis objects
 // =====================================================
 
-
 async function analyzeDocument(file) {
+  // Read document
 
-    // Read document
+  const rawText = await readDocument(file);
 
-    const rawText = await readDocument(file);
+  // Clean it
 
-    // Clean it
+  const cleanedText = cleanText(rawText);
 
-    const cleanedText = cleanText(rawText);
+  // Break into pieces
 
-    // Break into pieces
+  const paragraphs = splitIntoParagraphs(cleanedText);
 
-    const paragraphs =
-        splitIntoParagraphs(cleanedText);
+  const sentences = splitIntoSentences(cleanedText);
 
-    const sentences =
-        splitIntoSentences(cleanedText);
+  // Build analysis object
 
-    // Build analysis object
+  return {
+    fileName: file.name,
 
-    return {
+    fileSize: file.size,
 
-        fileName: file.name,
+    fileType: file.type,
 
-        fileSize: file.size,
+    text: cleanedText,
 
-        fileType: file.type,
+    wordCount: countWords(cleanedText),
 
-        text: cleanedText,
+    characterCount: countCharacters(cleanedText),
 
-        wordCount:
-            countWords(cleanedText),
+    paragraphCount: paragraphs.length,
 
-        characterCount:
-            countCharacters(cleanedText),
+    sentenceCount: sentences.length,
 
-        paragraphCount:
-            paragraphs.length,
+    paragraphs: paragraphs,
 
-        sentenceCount:
-            sentences.length,
+    sentences: sentences,
+  };
+}
 
-        paragraphs:
-
-            paragraphs,
-
-        sentences:
-
-            sentences
-
-    };
-
+async function analyzePage(text) {
+  const sentences = splitIntoSentences(cleanedText);
+  return sentences;
 }
